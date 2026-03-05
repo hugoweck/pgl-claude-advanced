@@ -54,13 +54,6 @@
     <div class="hero-scanlines" aria-hidden="true"></div>
     <div class="hero-lines" aria-hidden="true"></div>
 
-    <!-- Coordinate decoration -->
-    <div class="hero-ticker" aria-hidden="true">
-      <span>59°19'47"N</span>
-      <span>18°04'00"E</span>
-      <span>STOCKHOLM</span>
-    </div>
-
     <div class="container">
       <div class="hero-content">
         <p class="hero-eyebrow">
@@ -425,6 +418,62 @@
             </div>
           </article>
 
+          <article class="review-card" role="listitem" aria-hidden="true">
+            <div class="review-stars" aria-label="5 av 5 stjärnor">
+              <span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span>
+            </div>
+            <p class="review-text">"Vi anlitade företaget för invändig målning av samtliga rum i vår villa och blev väldigt nöjda med resultatet. Arbetet utfördes noggrant och med stor känsla för detaljer."</p>
+            <div class="review-author">
+              <div class="review-avatar" aria-hidden="true">JN</div>
+              <div>
+                <strong>Johan Nilsson</strong>
+                <span>Privatperson, Stockholm</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card" role="listitem" aria-hidden="true">
+            <div class="review-stars" aria-label="5 av 5 stjärnor">
+              <span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span>
+            </div>
+            <p class="review-text">"Professionellt team som levererade exakt det vi frågade efter. Takrenovationen gjordes snabbt och effektivt. Kan verkligen rekommenderas!"</p>
+            <div class="review-author">
+              <div class="review-avatar" aria-hidden="true">AL</div>
+              <div>
+                <strong>Anna Lindgren</strong>
+                <span>Fastighetsägare, Göteborg</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card" role="listitem" aria-hidden="true">
+            <div class="review-stars" aria-label="5 av 5 stjärnor">
+              <span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span>
+            </div>
+            <p class="review-text">"Tydlig kommunikation under hela projektet och resultatet översteg mina förväntningar. PGL Tak & Bygg vet verkligen vad de håller på med."</p>
+            <div class="review-author">
+              <div class="review-avatar" aria-hidden="true">MK</div>
+              <div>
+                <strong>Magnus Karlsson</strong>
+                <span>Villaägare, Uppsala</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card" role="listitem" aria-hidden="true">
+            <div class="review-stars" aria-label="5 av 5 stjärnor">
+              <span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span>
+            </div>
+            <p class="review-text">"Mycket nöjd med renoveringen av vår villa. Hantverkarna var pålitliga, punktliga och arbetet håller hög klass. Rekommenderar varmt!"</p>
+            <div class="review-author">
+              <div class="review-avatar" aria-hidden="true">SE</div>
+              <div>
+                <strong>Sara Eriksson</strong>
+                <span>Privatperson, Malmö</span>
+              </div>
+            </div>
+          </article>
+
         </div>
       </div>
 
@@ -609,23 +658,6 @@
   <script>
     'use strict';
 
-    /* ── Custom cursor ── */
-    const setCursorVars = (() => {
-      let cx2 = -100, cy2 = -100;
-      let rafId;
-      return (e) => {
-        document.body.style.setProperty('--cx',  `${e.clientX}px`);
-        document.body.style.setProperty('--cy',  `${e.clientY}px`);
-        cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() => {
-          cx2 += (e.clientX - cx2) * 0.12;
-          cy2 += (e.clientY - cy2) * 0.12;
-          document.body.style.setProperty('--cx2', `${cx2}px`);
-          document.body.style.setProperty('--cy2', `${cy2}px`);
-        });
-      };
-    })();
-    window.addEventListener('mousemove', setCursorVars, { passive: true });
 
     /* ── Navbar scroll state ── */
     const navbar = document.getElementById('navbar');
@@ -697,12 +729,6 @@
     counters.forEach(c => counterIO.observe(c));
 
     /* ── Testimonial slider: infinite auto-scroll with hover pause ── */
-    const track = document.getElementById('sliderTrack');
-    if (track && !track.dataset.loopReady) {
-      track.dataset.loopReady = 'true';
-      const cards = Array.from(track.children);
-      cards.forEach(card => track.appendChild(card.cloneNode(true))); // duplicate set for seamless loop
-    }
     /* ── Process line animation trigger ── */
     const processSection = document.querySelector('#process .process-steps');
     if (processSection) {
