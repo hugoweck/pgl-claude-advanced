@@ -89,38 +89,6 @@ body {
   overflow-x: hidden;
   /* Noise texture via SVG data URI */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-  cursor: none;
-}
-
-/* Custom cursor */
-body::before,
-body::after {
-  content: '';
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: var(--z-top);
-  transition: transform 0.15s var(--spring), opacity 0.3s;
-}
-body::before {
-  width: 8px; height: 8px;
-  background: var(--fire);
-  transform: translate(var(--cx, -100px), var(--cy, -100px)) translate(-50%, -50%);
-}
-body::after {
-  width: 36px; height: 36px;
-  border: 1.5px solid rgba(232,101,10,0.5);
-  transform: translate(var(--cx2, -100px), var(--cy2, -100px)) translate(-50%, -50%);
-  transition: transform 0.35s var(--spring), width 0.3s var(--spring), height 0.3s var(--spring);
-}
-
-/* Cursor expand on interactive */
-a, button, .service-card, .project-card {
-  cursor: none;
-}
-a:hover ~ body::after,
-button:hover ~ body::after {
-  width: 56px; height: 56px;
 }
 
 img { display: block; width: 100%; object-fit: cover; }
@@ -370,21 +338,28 @@ ul  { list-style: none; }
 .nav-cta::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: var(--white);
-  translate: 0 101%;
-  transition: translate 0.4s var(--spring);
-  z-index: -1;
+  top: -40%;
+  left: -160%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+  transform: translateX(-150%) rotate(18deg);
+  animation: btnShine 8s ease-in-out infinite;
+  pointer-events: none;
 }
-.nav-cta:hover { color: var(--fire) !important; letter-spacing: 0.14em !important; }
-.nav-cta:hover::after { translate: 0 0; }
+.nav-cta:hover { filter: brightness(1.08); color: var(--white) !important; letter-spacing: 0.14em !important; }
+
+@keyframes btnShine {
+  0%, 72%, 100% { transform: translateX(-150%) rotate(18deg); opacity: 0; }
+  78% { opacity: 0.7; }
+  88% { transform: translateX(250%) rotate(18deg); opacity: 0; }
+}
 
 /* Mobile toggle */
 .nav-toggle {
   display: none;
   width: 32px; height: 22px;
   position: relative;
-  cursor: none;
   z-index: calc(var(--z-nav) + 1);
 }
 .nav-toggle span {
@@ -406,11 +381,11 @@ ul  { list-style: none; }
 ══════════════════════════════════════════════ */
 #hero {
   position: relative;
-  height: 100svh;
+  min-height: 100svh;
   min-height: 680px;
   display: grid;
   place-items: center;
-  overflow: hidden;
+  overflow: clip;
   background: var(--ink);
   isolation: isolate;
 }
@@ -507,30 +482,13 @@ ul  { list-style: none; }
   50%       { opacity: 0.4; }
 }
 
-/* Horizontal coordinates ticker */
-.hero-ticker {
-  position: absolute;
-  bottom: 10rem; right: 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  opacity: 0.35;
-  pointer-events: none;
-}
-.hero-ticker span {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.15em;
-  color: var(--fire);
-  font-variant-numeric: tabular-nums;
-}
-
 /* Hero content */
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 900px;
   padding-inline: clamp(1.25rem, 4vw, 3rem);
+  padding-bottom: clamp(7rem, 15vh, 12rem);
   width: 100%;
 }
 
@@ -558,8 +516,8 @@ ul  { list-style: none; }
 .hero-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(3.5rem, 9vw, 8.5rem);
-  line-height: 0.86;
+  font-size: clamp(42px, 6vw, 110px);
+  line-height: 0.96;
   letter-spacing: -0.04em;
   text-transform: uppercase;
   color: var(--white);
@@ -613,7 +571,7 @@ ul  { list-style: none; }
   to   { opacity: 1; translate: 0 0; }
 }
 
-/* Primary button — shimmer + magnetic */
+/* Primary button — subtle shine sweep */
 .btn-primary {
   position: relative;
   display: inline-flex;
@@ -630,28 +588,24 @@ ul  { list-style: none; }
   border: none;
   overflow: hidden;
   isolation: isolate;
-  transition: transform 0.25s var(--bounce), box-shadow 0.4s;
-  --shimmer-x: -100%;
-  animation: none;
+  transition: transform 0.25s var(--bounce), box-shadow 0.4s, filter 0.3s;
 }
-.btn-primary::before {
+.btn-primary::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255,255,255,0.4) 50%,
-    transparent 70%
-  );
-  translate: var(--shimmer-x) 0;
-  transition: --shimmer-x 0s;
+  top: -40%;
+  left: -160%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%);
+  transform: translateX(-150%) rotate(18deg);
+  animation: btnShine 8s ease-in-out infinite;
+  pointer-events: none;
 }
 .btn-primary:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 20px 50px rgba(232,101,10,0.45), 0 0 0 1px rgba(232,101,10,0.3);
-  --shimmer-x: 200%;
-  transition: transform 0.25s var(--bounce), box-shadow 0.4s, --shimmer-x 0.6s ease;
+  filter: brightness(1.08);
 }
 .btn-primary:active { transform: translateY(-1px) scale(0.99); }
 .btn-primary .arrow {
@@ -749,7 +703,7 @@ ul  { list-style: none; }
 }
 
 .services-stack {
-  margin-top: calc(-1 * clamp(2rem, 5vw, 5rem));
+  margin-top: clamp(1.75rem, 4vw, 3rem);
   display: flex;
   justify-content: center;
   gap: 0;
@@ -771,7 +725,7 @@ ul  { list-style: none; }
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  margin: 0 -20px;
+  margin: 0;
   transition:
     transform 0.6s var(--spring),
     box-shadow 0.6s var(--spring),
@@ -1242,19 +1196,21 @@ ul  { list-style: none; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1rem, 2vw, 1.5rem);
   margin-top: 0.75rem;
+  align-items: stretch;
 }
 
 .project-card {
-  aspect-ratio: 16 / 10;
   perspective: 1200px;
-  cursor: none;
   position: relative;
+  min-height: 100%;
 }
 .project-card-inner {
   position: relative;
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 10;
   transform-style: preserve-3d;
-  transition: transform 0.42s ease;
+  transition: transform 400ms ease;
 }
 .project-card:hover .project-card-inner { transform: rotateY(180deg); }
 
@@ -1330,7 +1286,7 @@ ul  { list-style: none; }
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.58);
+  background: rgba(0,0,0,0.65);
 }
 .project-back-content {
   position: relative;
@@ -1357,7 +1313,7 @@ ul  { list-style: none; }
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--fire);
+  color: rgba(255,255,255,0.95);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -1408,7 +1364,7 @@ ul  { list-style: none; }
   gap: 1.5rem;
   width: max-content;
   will-change: transform;
-  animation: reviewScroll 34s linear infinite;
+  animation: reviewScroll 38s linear infinite;
 }
 
 .slider-outer:hover .slider-track,
@@ -1416,7 +1372,7 @@ ul  { list-style: none; }
 
 @keyframes reviewScroll {
   from { transform: translateX(0); }
-  to { transform: translateX(calc(-50% - 0.75rem)); }
+  to { transform: translateX(-50%); }
 }
 
 .review-card {
@@ -1817,7 +1773,6 @@ ul  { list-style: none; }
   letter-spacing: 0.2em;
   text-transform: uppercase;
   border: none;
-  cursor: none;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -1967,9 +1922,8 @@ ul  { list-style: none; }
   }
   .nav-links.open a { font-size: 1.75rem; letter-spacing: 0.15em; color: var(--white); }
   .nav-toggle { display: flex; }
-  .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+  .hero-title { font-size: clamp(42px, 11vw, 72px); line-height: 1.02; }
   .hero-scroll { display: none; }
-  .hero-ticker { display: none; }
   .projects-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .form-row { grid-template-columns: 1fr; }
@@ -1977,7 +1931,6 @@ ul  { list-style: none; }
   .footer-bottom { flex-direction: column; text-align: center; }
   .review-card { flex: 0 0 min(88vw, 22rem); }
   .process-steps { grid-template-columns: 1fr; }
-  body::before, body::after { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
