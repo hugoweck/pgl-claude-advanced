@@ -10,7 +10,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Familjen+Grotesk:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -428,14 +428,6 @@
         </div>
       </div>
 
-      <div class="slider-controls">
-        <button class="slider-btn" id="sliderPrev" aria-label="Föregående recension">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <button class="slider-btn" id="sliderNext" aria-label="Nästa recension">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
     </div>
   </section>
 
@@ -704,46 +696,13 @@
     }, { threshold: 0.6 });
     counters.forEach(c => counterIO.observe(c));
 
-    /* ── Testimonial slider ── */
+    /* ── Testimonial slider: infinite auto-scroll with hover pause ── */
     const track = document.getElementById('sliderTrack');
-    let currentSlide = 0;
-    let autoTimer;
-
-    const getVisible = () => {
-      if (window.innerWidth < 768)  return 1;
-      if (window.innerWidth < 1100) return 2;
-      return 3;
-    };
-    const totalCards = () => track.querySelectorAll('.review-card').length;
-    const maxSlide   = () => Math.max(0, totalCards() - getVisible());
-
-    const goTo = (idx) => {
-      currentSlide = Math.max(0, Math.min(idx, maxSlide()));
-      const cards   = track.querySelectorAll('.review-card');
-      if (!cards.length) return;
-      const gap  = 24;
-      const w    = cards[0].getBoundingClientRect().width;
-      track.style.transform = `translateX(-${currentSlide * (w + gap)}px)`;
-    };
-
-    const autoAdvance = () => {
-      autoTimer = setInterval(() => goTo(currentSlide >= maxSlide() ? 0 : currentSlide + 1), 5000);
-    };
-
-    document.getElementById('sliderPrev').addEventListener('click', () => { clearInterval(autoTimer); goTo(currentSlide - 1); autoAdvance(); });
-    document.getElementById('sliderNext').addEventListener('click', () => { clearInterval(autoTimer); goTo(currentSlide + 1); autoAdvance(); });
-
-    window.addEventListener('resize', () => goTo(currentSlide), { passive: true });
-    autoAdvance();
-
-    /* Swipe support */
-    let touchStartX = 0;
-    track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 40) { clearInterval(autoTimer); goTo(dx < 0 ? currentSlide + 1 : currentSlide - 1); autoAdvance(); }
-    }, { passive: true });
-
+    if (track && !track.dataset.loopReady) {
+      track.dataset.loopReady = 'true';
+      const cards = Array.from(track.children);
+      cards.forEach(card => track.appendChild(card.cloneNode(true))); // duplicate set for seamless loop
+    }
     /* ── Process line animation trigger ── */
     const processSection = document.querySelector('#process .process-steps');
     if (processSection) {
